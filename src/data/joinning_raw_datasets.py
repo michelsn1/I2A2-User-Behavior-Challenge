@@ -4,8 +4,8 @@ import os
 
 class MakeRawDataset():
     def __init__(self):
-        self.train_path = os.path.join('../data/raw/training_files')
-        self.test_path = os.path.join('../data/raw/test_files')
+        self.train_path = os.path.join('./data/raw/training_files')
+        self.test_path = os.path.join('./data/raw/test_files')
 
     def load_dataset(self,main_path,subject,session):
         subject_path =  os.path.join(main_path,subject)

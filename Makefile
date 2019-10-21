@@ -73,7 +73,8 @@ test_environment:
 # PROJECT RULES                                                                 #
 #################################################################################
 
-
+create_raw_data:
+	$(PYTHON_INTERPRETER) src/data/make_raw_datasets.py data/raw
 
 #################################################################################
 # Self Documenting Commands                                                     #
