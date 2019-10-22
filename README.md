@@ -1,7 +1,8 @@
 Mouse Challenge
 ==============================
 
-Competição do I2A2 para o desafio do mouse
+Competição do I2A2 para o desafio do mouse:
+https://www.kaggle.com/c/i2a2-user-behaviour-challenge
 
 Project Organization
 ------------
