@@ -1,47 +1,56 @@
 import pytest
 import os
 import pandas as pd
+import numpy as np
+
+@pytest.mark.parametrize(
+    'mode, subject', [  ('train','Subject_1'),
+                        ('train','Subject_9'),
+                        ( 'test', '0b50c151efc1')
+                    ]
+)
+def test_raw_dataset(mode,subject):
+
+    path = './data/raw/'
+    if mode == 'train':
+        main_df_path = os.path.join(path,'train_data.csv')
+        mode_path = os.path.join(path,'train_files')
+    elif mode =='test':
+        main_df_path = os.path.join(path,'test_data.csv')
+        mode_path = os.path.join(path,'test_files')
+    subject_path = os.path.join(mode_path,subject+'.csv')
 
 
-def test_raw_dataset_train():
+    main_df = pd.read_csv(main_df_path)
+    main_df = main_df[(main_df['subject']==subject)].reset_index(drop=True)
+    main_df = main_df.drop(['subject'],axis=1)
+    main_df = main_df.sort_values(by=['index'],
+                                        ascending=[True]
+                                        ).reset_index(drop=True)
 
-    subject = 'Subject_1'
-    session = 'session_3320405034'
+    original_df = pd.read_csv(subject_path)
+    original_df.columns = original_df.columns.str.replace(' ', '')
+    original_df.rename(columns = {"Unnamed:0" : "index"}, inplace = True)
+    original_df=original_df[original_df.timestamp.apply(
+                    lambda x: str(x)[3].isnumeric())].reset_index(drop=True
+                    )
+    original_df.timestamp = original_df.timestamp.astype(float)
+    original_df.x = original_df.x.astype(np.int32)
+    original_df.y = original_df.y.astype(np.int32)
 
-    main_path = os.path.join('./data/raw')
-    subject_path = os.path.join(main_path+'/training_files',subject)
-
-    main_df_train = pd.read_csv(os.path.join(main_path,'train_data.csv'))
-    main_df_train = main_df_train[(main_df_train['subject']==subject) &
-                                (main_df_train['session']==session)].reset_index()
-    main_df_train = main_df_train.drop(['subject','session'],axis=1)
-
-
-    aux_df_train = pd.read_csv(os.path.join(subject_path,session))
-
-    return aux_df_train.equals(main_df_train)
-
-def test_raw_testdataset():
-
-    subject = 'Subject_1'
-    session = 's_4ad65a2d0d2d'
-
-    main_path = os.path.join('./data/raw')
-    subject_path = os.path.join(main_path+'/test_files',subject)
-
-    main_df_test = pd.read_csv(os.path.join(main_path,'train_data.csv'))
-    main_df_test = main_df_test[(main_df_test['subject']==subject) &
-                                (main_df_test['session']==session)].reset_index()
-    main_df_test = main_df_test.drop(['subject','session'],axis=1)
+    return original_df.equals(main_df)
 
 
-    aux_df_test = pd.read_csv(os.path.join(subject_path,session))
 
-    return aux_df_test.equals(main_df_test)
+def subject_code_test():
+    df = pd.read_csv('./data/raw/train_data.csv')[['subject','target']].drop_duplicates()
+    df.columns = [['Subject','Code']]
+    df_subject = pd.read_csv('./data/raw/subjects.codes.csv')
+    return df.equals(df_subject)
 
 def dataset_tests():
-    assert test_raw_dataset_test()
-    assert test_raw_dataset_train()
+    assert test_raw_dataset()
+    assert subject_code_test()
 
 #def same_rows_number(df1,df2):
 #    return df1.shape[0]==df2.shape[0]
