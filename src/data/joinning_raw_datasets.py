@@ -23,8 +23,8 @@ class MakeRawDataset():
 
 
         df.timestamp = df.timestamp.astype(float)
-        df.x = df.x.astype(np.int32)
-        df.y = df.y.astype(np.int32)
+        df.x = df.x.astype(np.int64)
+        df.y = df.y.astype(np.int64)
 
         df = df.sort_values(by=['timestamp'],ascending=[True]).reset_index(drop=True)
         return df
