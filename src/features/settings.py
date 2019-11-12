@@ -17,9 +17,9 @@ NUM_EVAL_ACTIONS = 30 # how many actions are used for decision - only for EVAL_T
 ##############################
 # GENERAL settings
 ##############################
-BASE_FOLDER = 'C:/_DATA/_ANTAL_MARGIT/__SAJAT_CIKKEK/__ELOKESZULETBEN/_2017_MOUSE_DYNAMICS/_data/_Mouse-Dynamics-Challenge-master/'
-TRAINING_FOLDER = 'training_files'
-TEST_FOLDER   = 'test_files'
+BASE_FOLDER = './'
+TRAINING_FOLDER = 'data/processed/training_files'
+TEST_FOLDER   = 'data/processed/testing_files'
 PUBLIC_LABELS = 'public_labels.csv'
 # TRAINING_FEATURE_FILENAME  = 'output/balabit_features_training.csv'
 TRAINING_FEATURE_FILENAME  = 'balabit_features_training.csv'
@@ -44,7 +44,7 @@ ACTION_CSV_HEADER = "type_of_action,traveled_distance_pixel,elapsed_time,directi
                     "mean_vx,sd_vx,max_vx,min_vx,mean_vy,sd_vy,max_vy,min_vy,mean_v,sd_v,max_v,min_v,mean_a,sd_a,max_a,min_a,mean_jerk,sd_jerk,max_jerk,min_jerk,a_beg_time,n_from,n_to"+\
                     "\n"
 #ACTION_FILENAME = 'output/balabit_actions.csv'
-ACTION_FILENAME = 'balabit_actions3.csv'
+ACTION_FILENAME = 'preprocessed_action_data.csv'
 
 FILENAME = 'preprocessed_data.csv'
 

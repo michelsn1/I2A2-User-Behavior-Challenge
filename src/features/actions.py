@@ -1,9 +1,9 @@
 import numpy as np
 import math
 
-import general_statistics as gs
-import settings as st
-import time_sample_interpolation as ts
+import src.features.general_statistics as gs
+import src.features.settings as st
+import src.features.time_sample_interpolation as ts
 
 
 # computes features from an action
