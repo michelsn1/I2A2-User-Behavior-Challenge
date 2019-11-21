@@ -39,14 +39,14 @@ PC = 3
 DD = 4
 
 # temporary file
-ACTION_CSV_HEADER = "type_of_action,traveled_distance_pixel,elapsed_time,direction_of_movement,straightness,num_points,sum_of_angles,mean_curv,sd_curv,max_curv,min_curv," \
+ACTION_CSV_HEADER = "traveled_distance_pixel,elapsed_time,direction_of_movement,straightness,num_points,sum_of_angles,mean_curv,sd_curv,max_curv,min_curv," \
                     "mean_omega,sd_omega,max_omega,min_omega,largest_deviation,dist_end_to_end_line,num_critical_points,"+\
-                    "mean_vx,sd_vx,max_vx,min_vx,mean_vy,sd_vy,max_vy,min_vy,mean_v,sd_v,max_v,min_v,mean_a,sd_a,max_a,min_a,mean_jerk,sd_jerk,max_jerk,min_jerk,a_beg_time,n_from,n_to"+\
+                    "mean_vx,sd_vx,max_vx,min_vx,mean_vy,sd_vy,max_vy,min_vy,mean_v,sd_v,max_v,min_v,mean_a,sd_a,max_a,min_a,mean_jerk,sd_jerk,max_jerk,min_jerk,a_beg_time,n_from,n_to,target"+\
                     "\n"
 #ACTION_FILENAME = 'output/balabit_actions.csv'
-ACTION_FILENAME = 'preprocessed_action_data.csv'
+ACTION_FILENAME = '../data/processed/data'
 
-FILENAME = 'preprocessed_data.csv'
+FILENAME = '../data/processed/data'
 
 ##############################
 # Raw data preprocessing

@@ -9,7 +9,7 @@ import src.features.time_sample_interpolation as ts
 # computes features from an action
 # input:
 # returns a tuple representing a feature vector
-def computeActionFeatures(x, y, t,target, action_file, n_from, n_to):
+def computeActionFeatures(x, y, t, actionCode, action_file, n_from, n_to):
     n = len(x)
     if st.GLOBAL_DEBUG:
         print("\t\t"+str(n_from)+'-'+str(n_to)+" len: "+str(n))
@@ -199,7 +199,7 @@ def computeActionFeatures(x, y, t,target, action_file, n_from, n_to):
 
 
 
-    result =          str(trajectory) + ',' + str(time) + ',' + str(direction) + ','+\
+    result = str(actionCode) + ',' + str(trajectory) + ',' + str(time) + ',' + str(direction) + ','+\
                       str(straightness)+ ','+ str(n)+','+str(sumOfAngles)+','+\
                       str(mean_curv) + "," + str(sd_curv) + "," + str(max_curv) + "," +str(min_curv)+","+\
                       str(mean_omega)+","+str(sd_omega)+","+str(max_omega)+","+str(min_omega)+","+\
@@ -211,15 +211,15 @@ def computeActionFeatures(x, y, t,target, action_file, n_from, n_to):
                       str(mean_a)    + "," + str(sd_a)    + "," + str(max_a) + "," +str(min_a)+","+\
                       str(mean_jerk) + "," + str(sd_jerk) + "," + str(max_jerk) + "," +str(min_jerk)+","+\
                       str(accTimeAtBeginning)+","+\
-                      str(n_from)+","+str(n_to)+","+str(target)+\
+                      str(n_from)+","+str(n_to)+\
                       "\n"
 
     return result
 
 # computer features from an action [n_from, n_to]
 # and writes into the action file
-def printAction(x, y, t,target, action_file, n_from, n_to):
-    result = computeActionFeatures(x, y, t,target, action_file, n_from, n_to)
+def printAction(x, y, t, actionCode, action_file, n_from, n_to):
+    result = computeActionFeatures(x, y, t, actionCode, action_file, n_from, n_to)
 
     if result != None:
         action_file.write(result)
@@ -243,17 +243,161 @@ def largestDeviation(x, y):
         max /= den
     return max
 
-# can be a compound action: {MM}*PC
-def processPointClickActions(data, target,action_file, n_from, n_to):
-    if st.GLOBAL_DEBUG:
-        print("MM*PC:" + str(n_from) + "-" + str(n_to))
-    x = data['x']
-    y = data['y']
-    t = data['t']
-    start = n_from
-    printAction(x, y, t,target, action_file, n_from, n_to)
+
+# one PC action
+def processPointClick(x, y, t, action_file, n_from, n_to):
+    printAction(x, y, t, st.PC, action_file, n_from, n_to)
     return
 
+# one MM action
+def processMouseMove(x, y, t, action_file, n_from, n_to):
+    printAction(x, y, t, st.MM, action_file, n_from, n_to)
+    return
+
+# one DD action
+def processDragAction(x, y, t, action_file, n_from, n_to):
+    printAction(x, y, t, st.DD, action_file, n_from, n_to)
+    return
+
+
+# can be a compound action: {MM}*PC
+def processPointClickActions(data, action_file, n_from, n_to):
+    if st.GLOBAL_DEBUG:
+        print("MM*PC:" + str(n_from) + "-" + str(n_to))
+    x = []
+    y = []
+    t = []
+    prevTime = 0
+    start = n_from
+    counter = 0
+    for item in data:
+        actState = item['state']
+        actTime = float(item['t'])
+        counter += 1
+        if actState == 'Pressed':
+            if len(t) > st.GLOBAL_MIN_ACTION_LENGTH:
+                x.append(item['x'])
+                y.append(item['y'])
+                t.append(actTime)
+                if st.GLOBAL_DEBUG:
+                    print("\tPC:"+str(start)+"-"+str(n_to))
+                processPointClick(x, y, t, action_file, start, n_to)
+            return
+        else:
+            # idokuszob miatt vagunk
+            if actTime - prevTime > st.GLOBAL_DELTA_TIME:
+                stop = n_from + counter - 2
+                # ha eleg hosszu az adatsor mentjuk
+                if len(t) > st.GLOBAL_MIN_ACTION_LENGTH:
+                    if st.GLOBAL_DEBUG:
+                        print("\tMM:" + str(start) + "-" + str(stop))
+                    processMouseMove(x, y, t, action_file, start, stop)
+                # uj AcTION kezdodik
+                x = []
+                y = []
+                t = []
+                start = stop+1
+            else:
+                x.append(item['x'])
+                y.append(item['y'])
+                t.append(actTime)
+        prevTime = actTime
+    return
+
+# can be a compound action: {MM}*
+def processMouseMoveActions(data, action_file, n_from, n_to):
+    if st.GLOBAL_DEBUG:
+        print("MM*MM:" + str(n_from) + "-" + str(n_to))
+    x = []
+    y = []
+    t = []
+    start = n_from
+    counter = 0
+    prevTime = 0
+    for item in data:
+        x.append(item['x'])
+        y.append(item['y'])
+        counter += 1
+        actTime = float(item['t'])
+        t.append(actTime)
+        if actTime - prevTime > st.GLOBAL_DELTA_TIME:
+            stop = n_from + counter - 2
+            if len(t) > st.GLOBAL_MIN_ACTION_LENGTH:
+
+                if st.GLOBAL_DEBUG:
+                    print("\tMM:" + str(start) + "-" + str(stop))
+                processMouseMove(x, y, t, action_file, start, stop)
+                x = []
+                y = []
+                t = []
+                start = stop+1
+        prevTime = actTime
+    if len(t) > st.GLOBAL_MIN_ACTION_LENGTH:
+        if st.GLOBAL_DEBUG:
+            print("\tMM:" + str(start) + "-" + str(n_to))
+        processMouseMove(x, y, t, action_file, start, n_to)
+    return
+
+# {MM}*DD
+def processDragActions(data, action_file, n_from, n_to):
+    if st.GLOBAL_DEBUG:
+        print("MM*DD:" + str(n_from) + "-" + str(n_to))
+    x = []
+    y = []
+    t = []
+    start = n_from
+    stop = start
+    counter = 0
+    prevTime = 0
+    for item in data:
+        actButton = item['button']
+        actState = item['state']
+        actTime = float(item['t'])
+        counter += 1
+        if actButton == 'NoButton' and actState == 'Move':
+            if actTime - prevTime > st.GLOBAL_DELTA_TIME:
+                stop = n_from + counter - 2
+                if len(t) > st.GLOBAL_MIN_ACTION_LENGTH:
+                    if st.GLOBAL_DEBUG:
+                        print("\tMM:" + str(start) + "-" + str(stop))
+                    processMouseMove(x, y, t, action_file, start, stop)
+                x = []
+                y = []
+                t = []
+                start = stop +1
+            x.append(item['x'])
+            y.append(item['y'])
+            t.append(actTime)
+
+        if actButton == 'Left' and actState == 'Pressed':
+            # ends the MM action
+            if len(t) > st.GLOBAL_MIN_ACTION_LENGTH:
+                stop = n_from + counter - 2
+                if st.GLOBAL_DEBUG:
+                    print("\tMM:" + str(start) + "-" + str(stop))
+                processMouseMove(x, y, t, action_file, start, stop)
+            # starts the DD action
+            x = []
+            y = []
+            t = []
+            start = stop +1
+            x.append(item['x'])
+            y.append(item['y'])
+            t.append(actTime)
+        if actButton == 'Left' and actState == 'Released':
+            # ends the DD action
+            x.append(item['x'])
+            y.append(item['y'])
+            t.append(actTime)
+            if st.GLOBAL_DEBUG:
+                print("\tDD:" + str(start) + "-" + str(n_to))
+            processDragAction(x, y, t, action_file, start, n_to)
+        if actButton == 'NoButton' and actState == 'Drag':
+            x.append(item['x'])
+            y.append(item['y'])
+            t.append(actTime)
+        prevTime = actTime
+    return
 
 # directions: 0..7
 # Ahmed & Traore, IEEE TDSC2007
@@ -276,3 +420,41 @@ def computeDirection(theta):
     if -math.pi <= theta < -3 * math.pi / 4:
         direction = 4;
     return direction
+
+
+# directions: 0..7
+# Chao Shen, TIFS, 2013-as cikk alapjan
+# def computeDirection(theta):
+#     direction = 0
+#
+#     if -math.pi / 8 <= theta < 0:
+#         direction = 0
+#     if 0 <= theta < math.pi / 8:
+#         direction = 0
+#
+#
+#     if math.pi/8 <= theta < 3*math.pi / 8:
+#         direction = 1
+#
+#     if 3*math.pi / 8 <= theta < 5*math.pi / 8:
+#         direction = 2
+#
+#     if 5*math.pi / 8 <= theta < 7 * math.pi / 8:
+#         direction = 3
+#
+#     if 7*math.pi / 8 <= theta < math.pi:
+#         direction = 4
+#     if -math.pi <= theta <-7* math.pi/8:
+#         direction = 4
+#
+#     if -7 * math.pi / 8 <= theta < -5*math.pi/8:
+#         direction = 5
+#
+#     if -5 *math.pi / 8 <= theta < -3 *math.pi / 8:
+#         direction = 6;
+#
+#     if -3 * math.pi / 8 <= theta < -math.pi / 8:
+#         direction = 7;
+#
+#
+#     return direction
