@@ -7,15 +7,19 @@ https://www.kaggle.com/c/i2a2-user-behaviour-challenge
 ## Para configurar o projeto digite no terminal os seguintes comandos:
 
 1) $ make create_environment
+
 Irá criar um ambiente virtual;
 
 2) $ source venv/bin/activate
+
 Irá ativar o ambiente virtual;
 
 3) $ make requirements
+
 Irá instalar as bibliotecas necessárias para a execução do código;
 
 4) $ make create_data_folder
+
 Irá criar o dataset
 
 **Atenção: Os dados na pasta recém criada Data devem obedecer a seguinte estrutura**
@@ -35,9 +39,11 @@ Irá criar o dataset
 --------
 
 5) $ make raw_data
+
 Irá criar os datasets compilando todos as diferentes pessoas de treino e validação num único arquivo
 
 6) $ make prediction
+
 Irá realizar a predição dos dados salvando os resultados na pasta Submissions
 
 PS: Para treinar o modelo novamente basta rodar o notebook "Creating Processed Data and Trainning"
