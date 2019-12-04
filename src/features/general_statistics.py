@@ -1,8 +1,5 @@
 import math
 import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
-
 
 # Statistical functions
 # [start, stop)
@@ -55,4 +52,3 @@ def containsNull ( x ):
         if x[i] == 0:
             return True
     return False
-

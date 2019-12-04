@@ -8,5 +8,5 @@ OUTPUT_PATH = './Submissions/submission.csv'
 
 ### Iniciando a Predição
 
-prediction = Predict_label()
+prediction = Predict_label(SUBMISSION_DATA_PATH,SAMPLE_SUBMISSION_PATH)
 prediction.start(output_path=OUTPUT_PATH)
