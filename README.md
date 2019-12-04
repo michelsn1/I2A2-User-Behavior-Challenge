@@ -4,55 +4,43 @@ Mouse Challenge
 Competição do I2A2 para o desafio do mouse:
 https://www.kaggle.com/c/i2a2-user-behaviour-challenge
 
-Project Organization
+## Para configurar o projeto digite no terminal os seguintes comandos:
+
+1) $ make create_environment
+Irá criar um ambiente virtual;
+
+2) $ source venv/bin/activate
+Irá ativar o ambiente virtual;
+
+3) $ make requirements
+Irá instalar as bibliotecas necessárias para a execução do código;
+
+4) $ make create_data_folder
+Irá criar o dataset
+
+**Atenção: Os dados na pasta recém criada Data devem obedecer a seguinte estrutura**
 ------------
 
-    ├── LICENSE
-    ├── Makefile           <- Makefile with commands like `make data` or `make train`
-    ├── README.md          <- The top-level README for developers using this project.
     ├── data
-    │   ├── external       <- Data from third party sources.
-    │   ├── interim        <- Intermediate data that has been transformed.
-    │   ├── processed      <- The final, canonical data sets for modeling.
-    │   └── raw            <- The original, immutable data dump.
+    │   ├── processed             <- O dado final salvo pronto para o input dos modelos
+    │   └── raw            
+    │        ├──test_files        <- Pasta de Dados de teste para submissão direto do Kaggle
+    │        ├──training_files    <- Pasta de Dados de treino para submissão direto do Kaggle
+    │        ├──sample_submission <- Arquivo com a sample submission dos resultados
+    │        ├──test_data.csv     <- Arquivo com o dataset compilado de submissão após o uso do comando 5
+    │        └──train_data.csv    <- Arquivo com o dataset compilado de treino após o uso do comando 5
     │
-    ├── docs               <- A default Sphinx project; see sphinx-doc.org for details
-    │
-    ├── models             <- Trained and serialized models, model predictions, or model summaries
-    │
-    ├── notebooks          <- Jupyter notebooks. Naming convention is a number (for ordering),
-    │                         the creator's initials, and a short `-` delimited description, e.g.
-    │                         `1.0-jqp-initial-data-exploration`.
-    │
-    ├── references         <- Data dictionaries, manuals, and all other explanatory materials.
-    │
-    ├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
-    │   └── figures        <- Generated graphics and figures to be used in reporting
-    │
-    ├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
-    │                         generated with `pip freeze > requirements.txt`
-    │
-    ├── setup.py           <- makes project pip installable (pip install -e .) so src can be imported
-    ├── src                <- Source code for use in this project.
-    │   ├── __init__.py    <- Makes src a Python module
-    │   │
-    │   ├── data           <- Scripts to download or generate data
-    │   │   └── make_dataset.py
-    │   │
-    │   ├── features       <- Scripts to turn raw data into features for modeling
-    │   │   └── build_features.py
-    │   │
-    │   ├── models         <- Scripts to train models and then use trained models to make
-    │   │   │                 predictions
-    │   │   ├── predict_model.py
-    │   │   └── train_model.py
-    │   │
-    │   └── visualization  <- Scripts to create exploratory and results oriented visualizations
-    │       └── visualize.py
-    │
-    └── tox.ini            <- tox file with settings for running tox; see tox.testrun.org
-
+    └── submissions            <- Pasta de arquivos de saída com as predições
 
 --------
+
+5) $ make raw_data
+Irá criar os datasets compilando todos as diferentes pessoas de treino e validação num único arquivo
+
+6) $ make prediction
+Irá realizar a predição dos dados salvando os resultados na pasta Submissions
+
+PS: Para treinar o modelo novamente basta rodar o notebook "Creating Processed Data and Trainning"
+da pasta Notebooks.
 
 <p><small>Project based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>

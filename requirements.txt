@@ -2,11 +2,7 @@
 -e .
 
 # external requirements
-click
-Sphinx
-coverage
-flake8
-ipdb
-pytest
-python-dotenv
 pandas
+numpy
+scikit-learn
+xgboost

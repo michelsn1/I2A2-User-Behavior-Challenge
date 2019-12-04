@@ -44,9 +44,9 @@ ACTION_CSV_HEADER = "traveled_distance_pixel,elapsed_time,direction_of_movement,
                     "mean_vx,sd_vx,max_vx,min_vx,mean_vy,sd_vy,max_vy,min_vy,mean_v,sd_v,max_v,min_v,mean_a,sd_a,max_a,min_a,mean_jerk,sd_jerk,max_jerk,min_jerk,a_beg_time,n_from,n_to,target"+\
                     "\n"
 #ACTION_FILENAME = 'output/balabit_actions.csv'
-ACTION_FILENAME = '../data/processed/data'
+ACTION_FILENAME = './data/processed/data'
 
-FILENAME = '../data/processed/data'
+FILENAME = './data/processed/data'
 
 ##############################
 # Raw data preprocessing

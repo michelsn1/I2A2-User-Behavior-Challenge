@@ -1,21 +1,12 @@
-try:
-    import unzip_requirements
-except ImportError:
-    pass
+from src.models.predict_model import Predict_label
 
+### Argumentos com o caminho do datasets para predição
 
+SUBMISSION_DATA_PATH = './data/raw/test_data.csv'
+SAMPLE_SUBMISSION_PATH = './data/raw/sample_submission.csv'
+OUTPUT_PATH = './Submissions/submission.csv'
 
-def lambda_function(event, context):
-    request_json = None
-    ## For local test the lambda_function recieves a dict instead of a json-str
-    if type(event) == dict:
-        raw_response = "I'm testing"
-    else:
-        raw_response = "I'm deployed"
+### Iniciando a Predição
 
-    return {
-            'isBase64Encoded': False,
-            'statusCode': 201,
-            'headers': { 'Content-type': 'application/json' },
-            'body': json.dumps(raw_response)
-            }
+prediction = Predict_label()
+prediction.start(output_path=OUTPUT_PATH)

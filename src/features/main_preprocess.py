@@ -41,10 +41,13 @@ def processSession1(df, action_file,time_limit):
     return
 
 
-def process_files(df,subject,time_limit=0.3):
+def process_files(df,subject,time_limit=0.3,train_notebook=True):
 
-    filename = st.ACTION_FILENAME+'_'+subject+'.csv'
-
+    if train_notebook:
+        filename = '.'+st.ACTION_FILENAME+'_'+subject+'.csv'
+    else:
+        filename = st.ACTION_FILENAME+'_'+subject+'.csv'
+        
     action_file = open(filename, "w")
     action_file.write(st.ACTION_CSV_HEADER)
 

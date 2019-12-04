@@ -30,7 +30,7 @@ activate_venv:
 ## Make Dataset
 
 create_data_folder:
-	mkdir -p data/raw/ data/external/ data/interim/ data/processed/
+	mkdir -p data/raw/ data/processed/
 
 processed_data: create_data_folder
 	$(PYTHON_INTERPRETER) src/data/make_processed_dataset.py data/raw data/processed
@@ -75,6 +75,9 @@ test_environment:
 
 create_raw_data:
 	$(PYTHON_INTERPRETER) src/data/make_raw_datasets.py data/raw
+
+predictions:
+	$(PYTHON_INTERPRETER) main.py
 
 #################################################################################
 # Self Documenting Commands                                                     #
