@@ -4,11 +4,11 @@ import os
 
 class MakeRawDataset():
     def __init__(self):
-        self.train_path = os.path.join('./data/raw/train_files')
+        self.train_path = os.path.join('./data/raw/training_files')
         self.test_path = os.path.join('./data/raw/test_files')
 
-    def load_dataset(self,main_path,subject):
-        subject_path =  os.path.join(main_path,subject)
+    def load_dataset(self,main_path,subject,session):
+        subject_path =  os.path.join(main_path,subject,session)
         df = pd.read_csv(subject_path,dtype={'timestamp':np.float64})
 
         df.columns = df.columns.str.replace(' ', '')
@@ -30,8 +30,13 @@ class MakeRawDataset():
         return df
 
     def load_subjects(self,path):
-        subjects_folders = [f for f in os.listdir(path)]
+        subjects_folders = [f for f in os.listdir(path) if not os.path.isfile(f)]
         return subjects_folders
+
+    def load_sessions(self,path,subject):
+        full_path = os.path.join(path,subject)
+        sessions_list = [f for f in os.listdir(full_path)]
+        return sessions_list
 
     def subjects_code(self,df):
 
@@ -56,11 +61,12 @@ class MakeRawDataset():
         df = None
 
         for subject in subjects_list:
-            if df is None:
-                df = self.load_dataset(path,subject)
-            else:
-                df = df.append(self.load_dataset(path,subject))
-
+            session_list=self.load_sessions(path,subject)
+            for session in session_list:
+                if df is None:
+                    df = self.load_dataset(path,subject,session)
+                else:
+                    df = df.append(self.load_dataset(path,subject,session))
         if mode =='train':
             df = self.subjects_code(df)
         return df

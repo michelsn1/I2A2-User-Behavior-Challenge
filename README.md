@@ -38,7 +38,7 @@ Irá criar o dataset
 
 --------
 
-5) $ make raw_data
+5) $ make create_raw_data
 
 Irá criar os datasets compilando todos as diferentes pessoas de treino e validação num único arquivo
 

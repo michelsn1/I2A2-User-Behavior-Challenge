@@ -2,7 +2,6 @@
 import click
 import logging
 from pathlib import Path
-from dotenv import find_dotenv, load_dotenv
 from joinning_raw_datasets import MakeRawDataset
 import os
 
@@ -33,6 +32,4 @@ if __name__ == '__main__':
 
     # find .env automagically by walking up directories until it's found, then
     # load up the .env entries as environment variables
-    load_dotenv(find_dotenv())
-
     main()
