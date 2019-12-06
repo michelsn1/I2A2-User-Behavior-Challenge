@@ -2,7 +2,7 @@ Mouse Challenge
 ==============================
 
 Competição do I2A2 para o desafio do mouse:
-https://www.kaggle.com/c/i2a2-user-behaviour-challenge
+https://www.kaggle.com/c/i2a2-user-mouse-challenge
 
 ## Para configurar o projeto digite no terminal os seguintes comandos:
 
@@ -38,15 +38,17 @@ Irá criar o dataset
 
 --------
 
-5) $ make raw_data
+5) $ make create_raw_data
 
 Irá criar os datasets compilando todos as diferentes pessoas de treino e validação num único arquivo
 
-6) $ make prediction
+6) $ make predictions
 
-Irá realizar a predição dos dados salvando os resultados na pasta Submissions
+Irá realizar a predição dos dados salvos em /data/raw/test_data.csv.
+Salvando os resultados na pasta Submissions
+OBS1: para alterar o arquivo de predição, basta mudar o path do arquivo em ./main.py
 
-PS: Para treinar o modelo novamente basta rodar o notebook "Creating Processed Data and Trainning"
+OBS2: Para treinar o modelo novamente basta rodar o notebook "Creating Processed Data and Trainning"
 da pasta Notebooks.
 
 <p><small>Project based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>
